@@ -1,0 +1,5 @@
+{
+  "name": "rescan-index",
+  "description": "Rebuild the function index used by check-existing-code.",
+  "files": ["SKILL.md", "scan.py"]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "spec-driven-tdd",
+  "description": "Enforce a spec-then-failing-test-then-implementation workflow for new features.",
+  "files": ["SKILL.md"]
+}

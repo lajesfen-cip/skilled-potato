@@ -11,7 +11,7 @@ The mechanical part (finding every function/class and its file:line) is done by 
 
 ## Steps
 
-1. Run the scanner: `node .claude/skills/rescan-index/scan.js` from the repo root. It walks the codebase (skipping `.gitignore`d and common build/dependency dirs) and prints a JSON array of `{file, line, name, kind, signature}` — one entry per function/class it found via regex, across JS/TS, Python, Go, Ruby, PHP, Java, and C#.
+1. Run the scanner: `python3 .claude/skills/rescan-index/scan.py` from the repo root. It walks the codebase (skipping `.gitignore`d and common build/dependency dirs) and prints a JSON array of `{file, line, name, kind, signature}` — one entry per function/class it found via regex, across JS/TS, Python, Go, Ruby, PHP, Java, and C#.
 2. Read the existing `.claude/function-index.md`, if present. For each scanned entry that matches an existing one (same file + name, line close enough that it's clearly the same function), carry over its description and `reusable` flag instead of re-deriving them.
 3. For any entry that's new or has no prior match, open the relevant file and write:
    - one-line description of what it does (infer from the code, not just the name)

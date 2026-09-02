@@ -1,0 +1,5 @@
+{
+  "name": "check-existing-code",
+  "description": "Search the codebase for existing implementations before writing new code.",
+  "files": ["SKILL.md"]
+}
