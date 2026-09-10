@@ -11,22 +11,52 @@ npm install -g git+https://github.com/lajesfen-cip/skilled-potato.git
 ## Usage
 
 ```
-potato list                     # see available skills
-potato add check-existing-code  # copies skills/check-existing-code/ into the current project's .claude/skills/
+potato list                          # see all skills available in the catalog
+potato list --local                  # see skills installed in the current project
+potato list --global                 # see skills installed globally (~/.claude/skills/)
+
+potato add check-existing-code       # install into the current project's .claude/skills/
+potato add check-existing-code -g    # install into ~/.claude/skills/ instead
+
+potato update check-existing-code    # update one installed skill to the latest version
+potato update --all                  # update every outdated installed skill
+potato update check-existing-code -g # same, but against the global install
+
+potato remove check-existing-code    # remove an installed skill (asks for confirmation)
+potato remove check-existing-code -y # skip the confirmation prompt
 ```
 
-`add` fetches only the files listed in that skill's `skill.json` — no full clone.
+`add`/`update` fetch only the files listed in that skill's `skill.json` — no full clone.
+Pass `-g`/`--global` to any of `add`/`remove`/`update` to target `~/.claude/skills/`
+instead of the current project. Destructive actions (`remove`, or `add`/`update`
+overwriting an existing install) ask for confirmation unless `-y`/`--yes` is passed.
 
 ## Development
 
-This is a TypeScript project, kept to a single source file: `src/index.ts`. It compiles to `dist/index.js`, which is exactly what the `potato` bin points at.
+Dev tooling uses [bun](https://bun.sh) (package manager + running TypeScript directly,
+no separate transpile step needed). The published CLI itself still targets plain
+Node — end users installing `potato` don't need bun installed.
 
 ```
-npm install
-npm run dev      # run the CLI directly from TypeScript source (no build step)
-npm run build    # compile src/index.ts -> dist/index.js
+bun install
+bun run dev               # run the CLI directly from TypeScript source (no build step)
+bun run build             # compile src -> dist (tsc)
+bun run lint              # check formatting/lint rules with Biome
+bun run lint:fix          # apply Biome's safe fixes
+bun run generate-manifest # regenerate skills/manifest.json from skills/*/skill.json
 ```
 
-`npm run prepare` (invoked automatically on `npm install`/`npm install -g`) builds `dist/`.
+The `prepare` script (invoked automatically on `npm install`/`npm install -g` for
+end users, and on `bun install` here) builds `dist/`.
+CI (`.github/workflows/ci.yml`) runs lint, build, and a check that
+`skills/manifest.json` is up to date on every push/PR to `main`.
 
-Skill content lives in `skills/<name>/` at the repo root (each with a `SKILL.md` and a `skill.json` manifest). This repo does not use its own skills — it's the source the CLI copies from, nothing more.
+Skill content lives in `skills/<name>/` at the repo root (each with a `SKILL.md`
+and a `skill.json` manifest). This repo does not use its own skills — it's the
+source the CLI copies from, nothing more.
+
+`skills/manifest.json` aggregates every skill's `skill.json` into one file, so
+`potato list`/`add`/`update` only need a single request to know the whole
+catalog instead of one request per skill. **After adding, removing, or editing
+a skill, run `bun run generate-manifest` and commit the result** — CI fails the
+build if the manifest drifts out of sync with the individual `skill.json` files.
