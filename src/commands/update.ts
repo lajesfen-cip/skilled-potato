@@ -7,6 +7,7 @@ import {
   type LocalSkillStatus,
   resolveSkillsDir,
 } from "../utils/skills";
+import { accent, dim, success } from "../utils/style";
 
 export type UpdateOptions = {
   global?: boolean;
@@ -26,7 +27,7 @@ export async function update(
   if (options.all) {
     targets = statuses.filter((status) => status.isOutdated);
     if (targets.length === 0) {
-      console.log("All skills are up to date.");
+      console.log(dim("All skills are up to date."));
       return;
     }
   } else {
@@ -48,7 +49,7 @@ export async function update(
       );
     }
     if (!found.isOutdated) {
-      console.log(`"${skill}" is already up to date.`);
+      console.log(dim(`"${accent(skill)}" is already up to date.`));
       return;
     }
     targets = [found];
@@ -57,7 +58,7 @@ export async function update(
   for (const target of targets) {
     if (!options.yes) {
       const confirmed = await confirm(
-        `Update "${target.name}" ${target.localVersion} -> ${target.remoteVersion}?`,
+        `Update "${accent(target.name)}" ${target.localVersion} -> ${target.remoteVersion}?`,
       );
       if (!confirmed) {
         continue;
@@ -67,6 +68,8 @@ export async function update(
     const metadata = await getSkillMetadata(target.name);
     const destDir = path.join(dir, target.name);
     await downloadSkillFiles(target.name, metadata, destDir);
-    console.log(`Updated ${target.name} -> ${metadata._version}`);
+    console.log(
+      success(`Updated ${accent(target.name)} -> ${metadata._version}`),
+    );
   }
 }

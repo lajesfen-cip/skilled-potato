@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { confirm } from "../utils/prompt";
 import { resolveSkillsDir } from "../utils/skills";
+import { accent, dim, success } from "../utils/style";
 
 export type RemoveOptions = {
   global?: boolean;
@@ -25,13 +26,13 @@ export async function remove(
   }
 
   if (!options.yes) {
-    const confirmed = await confirm(`Remove "${skill}" (${location})?`);
+    const confirmed = await confirm(`Remove "${accent(skill)}" (${location})?`);
     if (!confirmed) {
-      console.log("Aborted.");
+      console.log(dim("Aborted."));
       return;
     }
   }
 
   fs.rmSync(destDir, { recursive: true, force: true });
-  console.log(`Removed ${skill} (${location})`);
+  console.log(success(`Removed ${accent(skill)} (${location})`));
 }

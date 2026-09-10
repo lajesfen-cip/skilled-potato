@@ -5,6 +5,7 @@ import {
   type LocalSkillStatus,
   resolveSkillsDir,
 } from "../utils/skills";
+import { accent, dim, warn } from "../utils/style";
 
 export type ListOptions = {
   local?: boolean;
@@ -13,12 +14,12 @@ export type ListOptions = {
 
 function formatLocalStatus(status: LocalSkillStatus): string {
   if (status.isExternal) {
-    return `${status.name} (external)`;
+    return dim(`${status.name} (external)`);
   }
   if (status.isOutdated) {
-    return `${status.name} (outdated: ${status.localVersion} -> ${status.remoteVersion})`;
+    return `${accent(status.name)} ${warn(`(outdated: ${status.localVersion} -> ${status.remoteVersion})`)}`;
   }
-  return status.name;
+  return accent(status.name);
 }
 
 export async function list(options: ListOptions = {}): Promise<void> {
@@ -31,7 +32,7 @@ export async function list(options: ListOptions = {}): Promise<void> {
     const statuses = await getLocalSkillsStatus(dir);
 
     if (statuses.length === 0) {
-      console.log("No skills installed.");
+      console.log(dim("No skills installed."));
       return;
     }
 
@@ -45,7 +46,9 @@ export async function list(options: ListOptions = {}): Promise<void> {
   const lines = await Promise.all(
     remoteSkills.map(async (name) => {
       const metadata = await getSkillMetadata(name).catch(() => null);
-      return metadata ? `${name} - ${metadata.description}` : name;
+      return metadata
+        ? `${accent(name)} ${dim("-")} ${metadata.description}`
+        : accent(name);
     }),
   );
 

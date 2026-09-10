@@ -7,6 +7,7 @@ import {
   getSkillsList,
   resolveSkillsDir,
 } from "../utils/skills";
+import { accent, dim, success } from "../utils/style";
 
 export type AddOptions = {
   global?: boolean;
@@ -33,10 +34,10 @@ export async function add(
 
   if (fs.existsSync(destDir) && !options.yes) {
     const overwrite = await confirm(
-      `Skill "${skill}" is already installed. Overwrite?`,
+      `Skill "${accent(skill)}" is already installed. Overwrite?`,
     );
     if (!overwrite) {
-      console.log("Aborted.");
+      console.log(dim("Aborted."));
       return;
     }
   }
@@ -45,6 +46,8 @@ export async function add(
   await downloadSkillFiles(skill, metadata, destDir);
 
   console.log(
-    `Installed ${skill}@${metadata._version} (${options.global ? "global" : "local"})`,
+    success(
+      `Installed ${accent(skill)}@${metadata._version} (${options.global ? "global" : "local"})`,
+    ),
   );
 }

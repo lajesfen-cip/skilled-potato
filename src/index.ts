@@ -5,6 +5,7 @@ import { help } from "./commands/help.js";
 import { list } from "./commands/list.js";
 import { remove } from "./commands/remove.js";
 import { update } from "./commands/update.js";
+import { error } from "./utils/style.js";
 
 async function main(): Promise<void> {
   const [command, ...rest] = process.argv.slice(2);
@@ -69,15 +70,15 @@ async function main(): Promise<void> {
       help();
       break;
     default:
-      console.error(`Unknown command: ${command}`);
+      console.error(error(`Unknown command: ${command}`));
       help();
       process.exitCode = 1;
   }
 }
 
-main().catch((error: unknown) => {
+main().catch((err: unknown) => {
   console.error(
-    `Error: ${error instanceof Error ? error.message : String(error)}`,
+    error(`Error: ${err instanceof Error ? err.message : String(err)}`),
   );
   process.exitCode = 1;
 });
