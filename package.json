@@ -2,6 +2,7 @@
   "name": "skilled-potato",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "CLI that installs curated Claude Code skills from this repo into a project's .claude/skills/",
   "bin": {
     "potato": "./dist/index.js"
@@ -18,7 +19,7 @@
     "generate-manifest": "bun run scripts/generate-manifest.ts"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
+    "chalk": "^5",
     "prompts": "^2.4.2"
   },
   "devDependencies": {

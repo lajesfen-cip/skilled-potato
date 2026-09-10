@@ -4,8 +4,8 @@ import {
   getSkillsList,
   type LocalSkillStatus,
   resolveSkillsDir,
-} from "../utils/skills";
-import { accent, dim, warn } from "../utils/style";
+} from "../utils/skills.js";
+import { accent, bold, dim, warn } from "../utils/style.js";
 
 export type ListOptions = {
   local?: boolean;
@@ -31,13 +31,17 @@ export async function list(options: ListOptions = {}): Promise<void> {
     const dir = resolveSkillsDir(options.global);
     const statuses = await getLocalSkillsStatus(dir);
 
+    console.log(
+      bold(`Installed (${options.global ? "global" : "local"}):`),
+    );
+
     if (statuses.length === 0) {
       console.log(dim("No skills installed."));
       return;
     }
 
     for (const status of statuses) {
-      console.log(formatLocalStatus(status));
+      console.log(`${dim("•")} ${formatLocalStatus(status)}`);
     }
     return;
   }
@@ -52,7 +56,8 @@ export async function list(options: ListOptions = {}): Promise<void> {
     }),
   );
 
+  console.log(bold("Catalog:"));
   for (const line of lines) {
-    console.log(line);
+    console.log(`${dim("•")} ${line}`);
   }
 }

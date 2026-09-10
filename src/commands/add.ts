@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import { confirm } from "../utils/prompt";
+import { confirm } from "../utils/prompt.js";
 import {
   downloadSkillFiles,
   getSkillMetadata,
   getSkillsList,
   resolveSkillsDir,
-} from "../utils/skills";
-import { accent, dim, success } from "../utils/style";
+} from "../utils/skills.js";
+import { accent, dim, success } from "../utils/style.js";
 
 export type AddOptions = {
   global?: boolean;

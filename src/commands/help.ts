@@ -1,4 +1,4 @@
-import { accentBold, bold, dim } from "../utils/style";
+import { accentBold, bold, dim } from "../utils/style.js";
 
 export function help(): void {
   const cmd = (name: string, args = ""): string =>
@@ -9,7 +9,7 @@ export function help(): void {
 ${bold("Commands:")}
   ${cmd("add", "<skill>")}       Install a skill from the catalog into .claude/skills/
   ${cmd("remove", "<skill>")}    Remove an installed skill
-  ${cmd("list")}              List all skills available in the catalog
+  ${cmd("list")}              List all skills available in the catalog (use --local for installed)
   ${cmd("update", "<skill>")}    Update one installed skill to the latest version
 
 ${bold("Options:")}
